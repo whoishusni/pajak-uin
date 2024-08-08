@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <!-- Copyright 2024
+        Mohammad Husni Mubaraq
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pajak UIN DK Palu</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #ffffff; /* Latar belakang halaman putih */
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 12px;
+            background: #ffffff; /* Latar belakang kontainer putih */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+        }
+        h1 {
+            font-size: 24px;
+            color: #007BFF;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        input[type="button"] {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-right: 10px; /* Spasi antara tombol */
+        }
+        input[type="button"]:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background: #ffffff; /* Latar belakang hasil putih */
+            border: 1px solid #ddd;
+        }
+        .result p {
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Courier New', Courier, monospace; /* Font Courier New */
+            font-weight: bold; /* Menjadikan bold */
+        }
+        .result p span {
+            font-weight: bold;
+        }
+        footer {
+            margin-top: auto;
+            padding: 10px;
+            text-align: center;
+            background-color: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Perhitungan Pajak UIN Datokarama Palu</h1>
+        <div class="form-group">
+            <label for="amount">Jumlah Nominal:</label>
+            <input type="text" id="amount" placeholder="Masukkan jumlah nominal">
+        </div>
+        <input type="button" value="Hitung Pajak" onclick="calculateTaxes()">
+        <input type="button" value="Reset" onclick="resetForm()">
+
+        <div class="result">
+            <p>PPN (11%)                  : <span id="ppn">0</span></p>
+            <p>PPH Pasal 22 (1.5%)        : <span id="pph22">0</span></p>
+            <p>PPH Pasal 22 Non NPWP (3%) : <span id="pph22_3">0</span></p>
+            <p>PPH Pasal 23 (2%)          : <span id="pph23">0</span></p>
+            <p>PPH Pasal 23 Non NPWP (4%) : <span id="pph23_4">0</span></p>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2024 Husni - All Right Reserved.
+    </footer>
+
+    <script>
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
+        }
+
+        function calculateTaxes() {
+            var amount = parseFloat(document.getElementById('amount').value.replace(/[^0-9.-]+/g, ''));
+            if (isNaN(amount) || amount <= 0) {
+                alert('Silakan masukkan jumlah nominal yang valid.');
+                return;
+            }
+
+            var ppn = Math.round(((100/111) * amount) * 0.11);
+            var pph22 = Math.round(((100/111) * amount) * 0.015);
+            var pph22_3 = Math.round(((100/111) * amount) * 0.03);
+            var pph23 = Math.round(((100/111) * amount) * 0.02);
+            var pph23_4 = Math.round(((100/111) * amount) * 0.04);
+
+            document.getElementById('ppn').textContent = formatCurrency(ppn);
+            document.getElementById('pph22').textContent = formatCurrency(pph22);
+            document.getElementById('pph22_3').textContent = formatCurrency(pph22_3);
+            document.getElementById('pph23').textContent = formatCurrency(pph23);
+            document.getElementById('pph23_4').textContent = formatCurrency(pph23_4);
+        }
+
+        function resetForm() {
+            document.getElementById('amount').value = '';
+            document.getElementById('ppn').textContent = '0';
+            document.getElementById('pph22').textContent = '0';
+            document.getElementById('pph22_3').textContent = '0';
+            document.getElementById('pph23').textContent = '0';
+            document.getElementById('pph23_4').textContent = '0';
+        }
+    </script>
+</body>
+</html>
