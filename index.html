@@ -28,22 +28,29 @@
             background: #ffffff; /* Latar belakang kontainer putih */
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
             border: 1px solid #e0e0e0;
+            text-align: center; /* Menyatukan logo dan teks di tengah */
         }
         h1 {
             font-size: 26px;
             color: #0056b3;
             margin-bottom: 10px;
-            text-align: center;
         }
         h4 {
             font-size: 20px;
             color: #555;
             margin-top: 0;
             margin-bottom: 20px;
-            text-align: center;
+        }
+        .logo-container {
+            margin-bottom: 20px;
+        }
+        .logo-container img {
+            height: 50px; /* Sesuaikan dengan tinggi yang diinginkan */
+            margin: 0 10px; /* Jarak antar logo */
         }
         .form-group {
             margin-bottom: 20px;
+            text-align: left; /* Mengatur agar label dan input rata kiri */
         }
         label {
             display: block;
@@ -52,17 +59,22 @@
             color: #333;
         }
         input[type="text"] {
-            width: 100%;
+            width: calc(100% - 24px); /* Menyesuaikan dengan padding dan border */
             padding: 12px;
             border: 1px solid #ddd;
             border-radius: 8px;
             box-sizing: border-box;
             font-size: 16px;
             transition: border-color 0.3s ease;
+            margin-left: 0; /* Menghilangkan margin kiri jika ada */
         }
         input[type="text"]:focus {
             border-color: #0056b3;
             outline: none;
+        }
+        .button-container {
+            text-align: left; /* Menyatukan tombol ke kiri */
+            margin-top: 20px; /* Memberikan jarak atas dari elemen di atasnya */
         }
         input[type="button"] {
             background-color: #0056b3;
@@ -114,15 +126,21 @@
         Mohammad Husni Mubaraq
     -->
     <div class="container">
+        <div class="logo-container">
+            <img src="logo-uin.png" alt="Logo UIN Datokarama Palu">
+            <img src="logo-pajak.png" alt="Logo Pajak">
+            <img src="logo-ojk.png" alt="Logo OJK">
+        </div>
         <h1>Perhitungan Pajak UIN Datokarama Palu</h1>
         <h4>Perhitungan Pajak Menggunakan DPP (Dasar Pengenaan Pajak)</h4>
         <div class="form-group">
             <label for="amount">Jumlah Nominal:</label>
             <input type="text" id="amount" placeholder="Masukkan jumlah nominal">
         </div>
-        <input type="button" value="Hitung Pajak" onclick="calculateTaxes()">
-        <input type="button" value="Reset" onclick="resetForm()">
-
+        <div class="button-container">
+            <input type="button" value="Hitung Pajak" onclick="calculateTaxes()">
+            <input type="button" value="Reset" onclick="resetForm()">
+        </div>
         <div class="result">
             <p>PPN (11%)                    : <span id="ppn">0</span></p>
             <p>PPH Pasal 22 (1.5%)          : <span id="pph22">0</span></p>
