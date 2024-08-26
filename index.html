@@ -151,14 +151,20 @@
     </div>
 
     <footer>
-        &copy; 2024 Husni - All Right Reserved.
+        &copy; 2024 Husni - All Right Reserved. <br>
+        Build Version: <span id="build-version"></span>
     </footer>
 
     <script>
+        // Define the build version
+        const buildVersion = "26 Juli 2024"; // You can change this version as needed
+
+        // Function to format currency
         function formatCurrency(amount) {
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
         }
 
+        // Function to calculate taxes
         function calculateTaxes() {
             var amount = parseFloat(document.getElementById('amount').value.replace(/[^0-9.-]+/g, ''));
             if (isNaN(amount) || amount <= 0) {
@@ -179,6 +185,7 @@
             document.getElementById('pph23_4').textContent = formatCurrency(pph23_4);
         }
 
+        // Function to reset the form
         function resetForm() {
             document.getElementById('amount').value = '';
             document.getElementById('ppn').textContent = '0';
@@ -187,6 +194,7 @@
             document.getElementById('pph23').textContent = '0';
             document.getElementById('pph23_4').textContent = '0';
         }
+
+        // Display the build version in the footer
+        document.getElementById('build-version').textContent = buildVersion;
     </script>
-</body>
-</html>
