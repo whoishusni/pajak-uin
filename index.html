@@ -9,6 +9,7 @@
     <title>Pajak UIN Datokarama Palu</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap">
     <link rel="shortcut icon" href="favicon.png" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -157,7 +158,7 @@
     </footer>
 
     <script>
-        const buildVersion = "26 Mei 2025"; //build Versioan
+        const buildVersion = "26 Mei 2025"; // Build Version
 
         function formatCurrency(amount) {
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
@@ -167,7 +168,12 @@
         function calculateTaxes() {
             var amount = parseFloat(document.getElementById('amount').value.replace(/[^0-9.-]+/g, ''));
             if (isNaN(amount) || amount <= 0) {
-                alert('Silakan masukkan jumlah nominal yang valid.');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Nominal tidak valid!',
+                    text: 'Silakan masukkan jumlah nominal yang benar.',
+                    confirmButtonText: 'OK'
+                });
                 return;
             }
 
@@ -202,6 +208,11 @@
 
         // Popup saat halaman pertama kali dibuka
         window.onload = function() {
-            alert("Berikut Adalah Perhitungan Pajak Baru\nDengan Menggunakan Perhitungan DPP Baru dan PPN 12%\nHasil Akhirnya Tetap Sama Seperti Perhitungan PPN 11%");
+            Swal.fire({
+                title: 'Informasi Perhitungan Pajak',
+                text: 'Berikut adalah perhitungan pajak baru dengan DPP dan PPN 12%. Hasil akhirnya tetap sama seperti perhitungan PPN 11%.',
+                icon: 'info',
+                confirmButtonText: 'Mengerti'
+            });
         };
     </script>
