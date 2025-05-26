@@ -142,7 +142,8 @@
             <input type="button" value="Reset" onclick="resetForm()">
         </div>
         <div class="result">
-            <p>PPN (11%)                               : <span id="ppn">0</span></p>
+            <p>Perhitungang DPP Baru                   : <span id="dpp">0</span></p>
+            <p>PPN (12%)                               : <span id="ppn">0</span></p>
             <p>PPH Pasal 22 (1.5%)                     : <span id="pph22">0</span></p>
             <p>PPH Pasal 22 Tanpa NPWP Perusahaan (3%) : <span id="pph22_3">0</span></p>
             <p>PPH Pasal 23 (2%)                       : <span id="pph23">0</span></p>
@@ -151,15 +152,13 @@
     </div>
 
     <footer>
-        &copy; 2024 Husni - All Right Reserved. <br>
+        &copy; 2024-2025 Husni - All Right Reserved. <br>
         Build Version: <span id="build-version"></span>
     </footer>
 
     <script>
-        // Define the build version
-        const buildVersion = "26 Juli 2024"; // You can change this version as needed
+        const buildVersion = "26 Mei 2025"; //build Versioan
 
-        // Function to format currency
         function formatCurrency(amount) {
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
         }
@@ -172,12 +171,14 @@
                 return;
             }
 
-            var ppn = Math.round(((100/111) * amount) * 0.11);
+            var dpp = Math.round(((100/111)*(11/12)* amount));
+            var ppn = Math.round(((100/111)*(11/12)* amount) * 0.12);
             var pph22 = Math.round(((100/111) * amount) * 0.015);
             var pph22_3 = Math.round(((100/111) * amount) * 0.03);
             var pph23 = Math.round(((100/111) * amount) * 0.02);
             var pph23_4 = Math.round(((100/111) * amount) * 0.04);
 
+            document.getElementById('dpp').textContent = formatCurrency(dpp);
             document.getElementById('ppn').textContent = formatCurrency(ppn);
             document.getElementById('pph22').textContent = formatCurrency(pph22);
             document.getElementById('pph22_3').textContent = formatCurrency(pph22_3);
@@ -189,6 +190,7 @@
         function resetForm() {
             document.getElementById('amount').value = '';
             document.getElementById('ppn').textContent = '0';
+            document.getElementById('dpp').textContent = '0';
             document.getElementById('pph22').textContent = '0';
             document.getElementById('pph22_3').textContent = '0';
             document.getElementById('pph23').textContent = '0';
