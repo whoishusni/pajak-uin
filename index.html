@@ -199,4 +199,9 @@
 
         // Display the build version in the footer
         document.getElementById('build-version').textContent = buildVersion;
+
+        // Popup saat halaman pertama kali dibuka
+        window.onload = function() {
+            alert("Berikut Adalah Perhitungan Pajak Baru\nDengan Menggunakan Perhitungan DPP Baru dan PPN 12%\nHasil Akhirnya Tetap Sama Seperti Perhitungan PPN 11%");
+        };
     </script>
