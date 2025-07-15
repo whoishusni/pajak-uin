@@ -143,12 +143,11 @@
             <input type="button" value="Reset" onclick="resetForm()">
         </div>
         <div class="result">
-            <p>Hasil Perhitungan DPP Baru              : <span id="dpp">0</span></p>
+            <p>Hasil Perhitungan DPP PPN               : <span id="dpp_ppn">0</span></p>
+            <p>Hasil Perhitungan DPP PPH               : <span id="dpp_pph">0</span></p>
             <p>PPN (12%)                               : <span id="ppn">0</span></p>
             <p>PPH Pasal 22 (1.5%)                     : <span id="pph22">0</span></p>
-            <p>PPH Pasal 22 Tanpa NPWP Perusahaan (3%) : <span id="pph22_3">0</span></p>
             <p>PPH Pasal 23 (2%)                       : <span id="pph23">0</span></p>
-            <p>PPH Pasal 23 Tanpa NPWP Perusahaan (4%) : <span id="pph23_4">0</span></p>
         </div>
     </div>
 
@@ -158,7 +157,7 @@
     </footer>
 
     <script>
-        const buildVersion = "26 Mei 2025"; // Build Version
+        const buildVersion = "15 Juli 2025"; // Build Version
 
         function formatCurrency(amount) {
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
@@ -177,30 +176,29 @@
                 return;
             }
 
-            var dpp = Math.round(((100/111)*(11/12)* amount));
+            var dpp_ppn = Math.round(((100/111)*(11/12)* amount));
             var ppn = Math.round(((100/111)*(11/12)* amount) * 0.12);
+            var dpp_pph = Math.round(amount-ppn);
             var pph22 = Math.round(((100/111) * amount) * 0.015);
-            var pph22_3 = Math.round(((100/111) * amount) * 0.03);
             var pph23 = Math.round(((100/111) * amount) * 0.02);
-            var pph23_4 = Math.round(((100/111) * amount) * 0.04);
 
-            document.getElementById('dpp').textContent = formatCurrency(dpp);
+            document.getElementById('dpp_ppn').textContent = formatCurrency(dpp_ppn);
+            document.getElementById('dpp_pph').textContent = formatCurrency(dpp_pph);
             document.getElementById('ppn').textContent = formatCurrency(ppn);
             document.getElementById('pph22').textContent = formatCurrency(pph22);
-            document.getElementById('pph22_3').textContent = formatCurrency(pph22_3);
             document.getElementById('pph23').textContent = formatCurrency(pph23);
-            document.getElementById('pph23_4').textContent = formatCurrency(pph23_4);
+            
         }
 
         // Function to reset the form
         function resetForm() {
             document.getElementById('amount').value = '';
+            document.getElementById('dpp_ppn').textContent = '0';
+            document.getElementById('dpp_pph').textContent = '0';
             document.getElementById('ppn').textContent = '0';
-            document.getElementById('dpp').textContent = '0';
             document.getElementById('pph22').textContent = '0';
-            document.getElementById('pph22_3').textContent = '0';
             document.getElementById('pph23').textContent = '0';
-            document.getElementById('pph23_4').textContent = '0';
+           
         }
 
         // Display the build version in the footer
@@ -210,8 +208,8 @@
         window.onload = function() {
             Swal.fire({
                 icon: 'info',
-                title: 'Perhatian',
-                text: 'Berikut adalah perhitungan pajak baru dengan Perhitungan DPP Baru dan PPN 12%. Akan Tetapi Hasil akhirnya tetap sama seperti perhitungan PPN 11%.',
+                title: 'Apa Yang Baru?',
+                text: '1. Ada Penambahan Perhitungan Baru : DPP PPH',
                 confirmButtonText: 'Mengerti'
             });
         };
