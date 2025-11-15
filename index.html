@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <!-- Copyright 2024
-        Mohammad Husni Mubaraq
-    -->
+    <!-- Copyright 2024 Mohammad Husni Mubaraq -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pajak UIN Datokarama Palu</title>
@@ -15,68 +13,78 @@
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f5f7f9; /* Latar belakang yang lebih lembut */
+            background-color: #f5f7f9;
             color: #333;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
+
         .container {
             max-width: 700px;
             margin: 40px auto;
             padding: 30px;
             border-radius: 10px;
-            background: #ffffff; /* Latar belakang kontainer putih */
+            background: #ffffff;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
             border: 1px solid #e0e0e0;
-            text-align: center; /* Menyatukan logo dan teks di tengah */
+            text-align: center;
         }
+
         h1 {
             font-size: 26px;
             color: #0056b3;
             margin-bottom: 10px;
         }
+
         h4 {
             font-size: 20px;
             color: #555;
             margin-top: 0;
             margin-bottom: 20px;
         }
+
         .logo-container {
             margin-bottom: 10px;
         }
+
         .logo-container img {
-            height: 80px; /* Sesuaikan dengan tinggi yang diinginkan */
-            margin: 0 10px; /* Jarak antar logo */
+            height: 80px;
+            margin: 0 10px;
         }
+
         .form-group {
             margin-bottom: 20px;
-            text-align: left; /* Mengatur agar label dan input rata kiri */
+            text-align: left;
         }
+
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
             color: #333;
         }
+
         input[type="text"] {
-            width: calc(100% - 24px); /* Menyesuaikan dengan padding dan border */
+            width: calc(100% - 24px);
             padding: 12px;
             border: 1px solid #ddd;
             border-radius: 8px;
             box-sizing: border-box;
             font-size: 16px;
             transition: border-color 0.3s ease;
-            margin-left: 0; /* Menghilangkan margin kiri jika ada */
         }
+
         input[type="text"]:focus {
             border-color: #0056b3;
             outline: none;
         }
+
         .button-container {
-            text-align: left; /* Menyatukan tombol ke kiri */
-            margin-top: 20px; /* Memberikan jarak atas dari elemen di atasnya */
+            text-align: left;
+            margin-top: 20px;
         }
+
         input[type="button"] {
             background-color: #0056b3;
             color: white;
@@ -86,31 +94,36 @@
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s ease, transform 0.3s ease;
-            margin-right: 10px; /* Spasi antara tombol */
+            margin-right: 10px;
         }
+
         input[type="button"]:hover {
             background-color: #004494;
             transform: scale(1.05);
         }
+
         .result {
             margin-top: 30px;
             padding: 20px;
             border-radius: 8px;
-            background: #ffffff; /* Latar belakang hasil putih */
+            background: #ffffff;
             border: 1px solid #ddd;
         }
+
         .result p {
             margin: 15px 0;
             display: flex;
             justify-content: space-between;
-            font-family: 'Courier New', Courier, monospace; /* Font Courier New */
-            font-weight: bold; /* Menjadikan bold */
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
             color: #333;
         }
+
         .result p span {
             font-weight: bold;
             color: #0056b3;
         }
+
         footer {
             margin-top: auto;
             padding: 15px;
@@ -120,97 +133,149 @@
             font-size: 14px;
             color: #555;
         }
+
+        .countdown-number {
+            color: red;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .countdown-text {
+            color: black;
+        }
+
+        /* CSS untuk custom class SweetAlert */
+        .swal2-popup.custom-swal-popup {
+            width: 650px;  /* Sesuaikan lebar sesuai kebutuhan */
+            max-width: 90%;  /* Membatasi lebar maksimal */
+        }
     </style>
 </head>
 <body>
-    <!-- Copyright 2024
-        Mohammad Husni Mubaraq
-    -->
-    <div class="container">
-        <div class="logo-container">
-            <img src="logo-uin.png" alt="Logo UIN Datokarama Palu">
-            <img src="logo-pajak.png" alt="Logo Pajak">
-            <!-- <img src="logo-ojk.png" alt="Logo OJK"> -->
-        </div>
-        <h1>Perhitungan Pajak UIN Datokarama Palu</h1>
-        <h4>Perhitungan Pajak Menggunakan DPP (Dasar Pengenaan Pajak)</h4>
-        <div class="form-group">
-            <label for="amount">Jumlah Nominal:</label>
-            <input type="text" id="amount" placeholder="Masukkan jumlah nominal">
-        </div>
-        <div class="button-container">
-            <input type="button" value="Hitung Pajak" onclick="calculateTaxes()">
-            <input type="button" value="Reset" onclick="resetForm()">
-        </div>
-        <div class="result">
-            <p>Hasil Perhitungan DPP PPN               : <span id="dpp_ppn">0</span></p>
-            <p>Hasil Perhitungan DPP PPH               : <span id="dpp_pph">0</span></p>
-            <p>PPN (12%)                               : <span id="ppn">0</span></p>
-            <p>PPH Pasal 22 (1.5%)                     : <span id="pph22">0</span></p>
-            <p>PPH Pasal 23 (2%)                       : <span id="pph23">0</span></p>
-        </div>
+<!-- Copyright 2024 Mohammad Husni Mubaraq -->
+<div class="container">
+    <div class="logo-container">
+        <img src="logo-uin.png" alt="Logo UIN Datokarama Palu">
+        <img src="logo-pajak.png" alt="Logo Pajak">
     </div>
+    <h1>Perhitungan Pajak UIN Datokarama Palu</h1>
+    <h4>Perhitungan Pajak Menggunakan DPP (Dasar Pengenaan Pajak)</h4>
+    <div class="form-group">
+        <label for="amount">Jumlah Nominal:</label>
+        <input type="text" id="amount" placeholder="Masukkan jumlah nominal">
+    </div>
+    <div class="button-container">
+        <input type="button" value="Hitung Pajak" onclick="calculateTaxes()">
+        <input type="button" value="Reset" onclick="resetForm()">
+    </div>
+    <div class="result">
+        <p>Hasil Perhitungan DPP PPN : <span id="dpp_ppn">0</span></p>
+        <p>Hasil Perhitungan DPP PPH : <span id="dpp_pph">0</span></p>
+        <p>PPN (12%) : <span id="ppn">0</span></p>
+        <p>PPH Pasal 22 (1.5%) : <span id="pph22">0</span></p>
+        <p>PPH Pasal 23 (2%) : <span id="pph23">0</span></p>
+    </div>
+</div>
+<footer>
+    &copy; 2024-2025 Husni - All Right Reserved. <br> Build Version: <span id="build-version"></span>
+</footer>
 
-    <footer>
-        &copy; 2024-2025 Husni - All Right Reserved. <br>
-        Build Version: <span id="build-version"></span>
-    </footer>
+<script>
+    const buildVersion = "15 Juli 2025"; // Build Version
 
-    <script>
-        const buildVersion = "15 Juli 2025"; // Build Version
+    function formatCurrency(amount) {
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
+    }
 
-        function formatCurrency(amount) {
-            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
-        }
-
-        // Function to calculate taxes
-        function calculateTaxes() {
-            var amount = parseFloat(document.getElementById('amount').value.replace(/[^0-9.-]+/g, ''));
-            if (isNaN(amount) || amount <= 0) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Nominal Error',
-                    text: 'Silakan masukkan jumlah nominal Berupa ANGKA Bilangan Positif Bukan Yang Lain.',
-                    confirmButtonText: 'OK'
-                });
-                return;
-            }
-
-            var dpp_ppn = Math.round(((100/111)*(11/12)* amount));
-            var ppn = Math.round(((100/111)*(11/12)* amount) * 0.12);
-            var dpp_pph = Math.round(amount-ppn);
-            var pph22 = Math.round(((100/111) * amount) * 0.015);
-            var pph23 = Math.round(((100/111) * amount) * 0.02);
-
-            document.getElementById('dpp_ppn').textContent = formatCurrency(dpp_ppn);
-            document.getElementById('dpp_pph').textContent = formatCurrency(dpp_pph);
-            document.getElementById('ppn').textContent = formatCurrency(ppn);
-            document.getElementById('pph22').textContent = formatCurrency(pph22);
-            document.getElementById('pph23').textContent = formatCurrency(pph23);
-            
-        }
-
-        // Function to reset the form
-        function resetForm() {
-            document.getElementById('amount').value = '';
-            document.getElementById('dpp_ppn').textContent = '0';
-            document.getElementById('dpp_pph').textContent = '0';
-            document.getElementById('ppn').textContent = '0';
-            document.getElementById('pph22').textContent = '0';
-            document.getElementById('pph23').textContent = '0';
-           
-        }
-
-        // Display the build version in the footer
-        document.getElementById('build-version').textContent = buildVersion;
-
-        // Popup saat halaman pertama kali dibuka
-        window.onload = function() {
+    // Function to calculate taxes
+    function calculateTaxes() {
+        var amount = parseFloat(document.getElementById('amount').value.replace(/[^0-9.-]+/g, ''));
+        if (isNaN(amount) || amount <= 0) {
             Swal.fire({
-                icon: 'info',
-                title: 'Apa Yang Baru?',
-                text: '1. Ada Penambahan Perhitungan Baru : DPP PPH',
-                confirmButtonText: 'Mengerti'
+                icon: 'error',
+                title: 'Nominal Error',
+                text: 'Silakan masukkan jumlah nominal Berupa ANGKA Bilangan Positif Bukan Yang Lain.',
+                confirmButtonText: 'OK'
             });
-        };
-    </script>
+            return;
+        }
+        var dpp_ppn = Math.round(((100/111)*(11/12)* amount));
+        var ppn = Math.round(((100/111)*(11/12)* amount) * 0.12);
+        var dpp_pph = Math.round(amount-ppn);
+        var pph22 = Math.round(((100/111) * amount) * 0.015);
+        var pph23 = Math.round(((100/111) * amount) * 0.02);
+        document.getElementById('dpp_ppn').textContent = formatCurrency(dpp_ppn);
+        document.getElementById('dpp_pph').textContent = formatCurrency(dpp_pph);
+        document.getElementById('ppn').textContent = formatCurrency(ppn);
+        document.getElementById('pph22').textContent = formatCurrency(pph22);
+        document.getElementById('pph23').textContent = formatCurrency(pph23);
+    }
+
+    // Function to reset the form
+    function resetForm() {
+        document.getElementById('amount').value = '';
+        document.getElementById('dpp_ppn').textContent = '0';
+        document.getElementById('dpp_pph').textContent = '0';
+        document.getElementById('ppn').textContent = '0';
+        document.getElementById('pph22').textContent = '0';
+        document.getElementById('pph23').textContent = '0';
+    }
+
+    // Display the build version in the footer
+    document.getElementById('build-version').textContent = buildVersion;
+
+    // Countdown Functionality
+    function startCountdown(targetDate, elementId) {
+        const countdownDate = new Date(targetDate).getTime();
+
+        const interval = setInterval(function () {
+            const now = new Date().getTime();
+            const distance = countdownDate - now;
+
+            if (distance < 0) {
+                clearInterval(interval);
+                document.getElementById(elementId).innerHTML = "Waktu Habis";
+            } else {
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                document.getElementById(elementId).innerHTML =
+                    '<span class="countdown-number">' + days + '</span> Hari ' +
+                    '<span class="countdown-number">' + hours + '</span> Jam ' +
+                    '<span class="countdown-number">' + minutes + '</span> Menit ' +
+                    '<span class="countdown-number">' + seconds + '</span> Detik';
+            }
+        }, 1000);
+    }
+
+    window.onload = function () {
+        Swal.fire({
+            icon: 'info',
+            title: 'Countdown LLAT 2025',
+            html: `
+                <div style="font-size: 16px; color: #333; display: flex; flex-direction: column; gap: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <strong>SPM-TUP, SPM-GUP :</strong> <span id="countdown1" class="countdown-text"></span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <strong>SPM-LS Honorarium, Gaji, dll :</strong> <span id="countdown2" class="countdown-text"></span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <strong>SPM-LS Non Kontraktual :</strong> <span id="countdown3" class="countdown-text"></span>
+                    </div>
+                </div>`,
+            confirmButtonText: 'Mengerti',
+            customClass: {
+                popup: 'custom-swal-popup',  // Menambahkan kelas custom untuk SweetAlert
+            }
+        });
+
+        // Start countdown for two different countdowns
+        startCountdown("2025-12-05T15:00:00", "countdown1");
+        startCountdown("2025-12-12T15:00:00", "countdown2");
+        startCountdown("2025-12-22T15:00:00", "countdown3");
+    };
+</script>
+</body>
+</html>
