@@ -177,7 +177,7 @@
     </div>
 </div>
 <footer>
-    &copy; 2024-2025 Husni - All Right Reserved. <br> Build Version: <span id="build-version"></span>
+    &copy; 2024-2026 Husni - All Right Reserved. <br> Build Version: <span id="build-version"></span>
 </footer>
 
 <script>
@@ -224,58 +224,70 @@
     // Display the build version in the footer
     document.getElementById('build-version').textContent = buildVersion;
 
-    // Countdown Functionality
-    function startCountdown(targetDate, elementId) {
-        const countdownDate = new Date(targetDate).getTime();
-
-        const interval = setInterval(function () {
-            const now = new Date().getTime();
-            const distance = countdownDate - now;
-
-            if (distance < 0) {
-                clearInterval(interval);
-                document.getElementById(elementId).innerHTML = "Waktu Habis";
-            } else {
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                document.getElementById(elementId).innerHTML =
-                    '<span class="countdown-number">' + days + '</span> Hari ' +
-                    '<span class="countdown-number">' + hours + '</span> Jam ' +
-                    '<span class="countdown-number">' + minutes + '</span> Menit ' +
-                    '<span class="countdown-number">' + seconds + '</span> Detik';
-            }
-        }, 1000);
-    }
-
+    // pop-up sederhana
     window.onload = function () {
         Swal.fire({
-            icon: 'info',
-            title: 'Countdown LLAT 2025',
-            html: `
-                <div style="font-size: 16px; color: #333; display: flex; flex-direction: column; gap: 10px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <strong>SPM-TUP, SPM-GUP :</strong> <span id="countdown1" class="countdown-text"></span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <strong>SPM-LS Honorarium, Gaji, dll :</strong> <span id="countdown2" class="countdown-text"></span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <strong>SPM-LS Non Kontraktual :</strong> <span id="countdown3" class="countdown-text"></span>
-                    </div>
-                </div>`,
-            confirmButtonText: 'Mengerti',
-            customClass: {
-                popup: 'custom-swal-popup',  // Menambahkan kelas custom untuk SweetAlert
-            }
+        icon: 'info',
+        title: 'Loading....',
+        text: 'Mohon tunggu sebentar',
+        timer: 1500,
+        showConfirmButton: true
         });
-
-        // Start countdown for two different countdowns
-        startCountdown("2025-12-05T15:00:00", "countdown1");
-        startCountdown("2025-12-12T15:00:00", "countdown2");
-        startCountdown("2025-12-22T15:00:00", "countdown3");
     };
+
+    // //========================== Start Countdown Functionality ==========================
+    // function startCountdown(targetDate, elementId) {
+    //     const countdownDate = new Date(targetDate).getTime();
+
+    //     const interval = setInterval(function () {
+    //         const now = new Date().getTime();
+    //         const distance = countdownDate - now;
+
+    //         if (distance < 0) {
+    //             clearInterval(interval);
+    //             document.getElementById(elementId).innerHTML = "Waktu Habis";
+    //         } else {
+    //             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    //             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    //             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    //             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    //             document.getElementById(elementId).innerHTML =
+    //                 '<span class="countdown-number">' + days + '</span> Hari ' +
+    //                 '<span class="countdown-number">' + hours + '</span> Jam ' +
+    //                 '<span class="countdown-number">' + minutes + '</span> Menit ' +
+    //                 '<span class="countdown-number">' + seconds + '</span> Detik';
+    //         }
+    //     }, 1000);
+    // }
+
+    // window.onload = function () {
+    //     Swal.fire({
+    //         icon: 'info',
+    //         title: 'Countdown LLAT 2025',
+    //         html: `
+    //             <div style="font-size: 16px; color: #333; display: flex; flex-direction: column; gap: 10px;">
+    //                 <div style="display: flex; justify-content: space-between; align-items: center;">
+    //                     <strong>SPM-TUP, SPM-GUP :</strong> <span id="countdown1" class="countdown-text"></span>
+    //                 </div>
+    //                 <div style="display: flex; justify-content: space-between; align-items: center;">
+    //                     <strong>SPM-LS Honorarium, Gaji, dll :</strong> <span id="countdown2" class="countdown-text"></span>
+    //                 </div>
+    //                 <div style="display: flex; justify-content: space-between; align-items: center;">
+    //                     <strong>SPM-LS Non Kontraktual :</strong> <span id="countdown3" class="countdown-text"></span>
+    //                 </div>
+    //             </div>`,
+    //         confirmButtonText: 'Mengerti',
+    //         customClass: {
+    //             popup: 'custom-swal-popup',  // Menambahkan kelas custom untuk SweetAlert
+    //         }
+    //     });
+
+    //     // Start countdown 
+    //     startCountdown("2025-12-05T15:00:00", "countdown1");
+    //     startCountdown("2025-12-12T15:00:00", "countdown2");
+    //     startCountdown("2025-12-22T15:00:00", "countdown3");
+    // };
+    // //========================== End Countdown Functionality ==========================
 </script>
 </body>
 </html>
