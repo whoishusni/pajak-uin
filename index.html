@@ -705,7 +705,7 @@
             </div>
 
             <div class="form-group" style="margin-top:16px;">
-                <label for="amount42">DPP (Dasar Pengenaan Pajak)</label>
+                <label for="amount42">Nominal Transaksi</label>
                 <div class="input-wrap">
                     <span class="input-prefix">Rp</span>
                     <input type="text" id="amount42" placeholder="0" oninput="formatInput(this)">
@@ -730,14 +730,34 @@
             </div>
 
             <div class="results-grid">
+                <div class="result-card" id="card42-dpp-ppn">
+                    <div class="result-left">
+                        <div class="result-icon icon-teal">&#129518;</div>
+                        <div>
+                            <div class="result-name">DPP PPN <span class="result-tag tag-teal">Dasar Pengenaan</span></div>
+                        </div>
+                    </div>
+                    <div class="result-value zero" id="r42_dpp_ppn">&mdash;</div>
+                </div>
+
                 <div class="result-card" id="card42-dpp">
                     <div class="result-left">
                         <div class="result-icon icon-teal">&#129518;</div>
                         <div>
-                            <div class="result-name">DPP <span class="result-tag tag-teal">Dasar Pengenaan</span></div>
+                            <div class="result-name">DPP PPh <span class="result-tag tag-teal">Dasar Pengenaan</span></div>
                         </div>
                     </div>
                     <div class="result-value zero" id="r42_dpp">&mdash;</div>
+                </div>
+
+                <div class="result-card gold-accent" id="card42-ppn">
+                    <div class="result-left">
+                        <div class="result-icon icon-gold">&#128202;</div>
+                        <div>
+                            <div class="result-name">PPN <span class="result-tag tag-gold">12%</span></div>
+                        </div>
+                    </div>
+                    <div class="result-value zero" id="r42_ppn">&mdash;</div>
                 </div>
 
                 <div class="result-card" id="card42-tarif">
@@ -825,28 +845,37 @@
             return;
         }
         if (!raw || isNaN(amount) || amount <= 0) {
-            Swal.fire({ icon: 'error', title: 'Nominal Tidak Valid', text: 'Masukkan DPP berupa angka positif.', confirmButtonText: 'OK' });
+            Swal.fire({ icon: 'error', title: 'Nominal Tidak Valid', text: 'Masukkan nominal berupa angka positif.', confirmButtonText: 'OK' });
             return;
         }
 
-        const tarif = getTarif(sel.value);
-        const pph42 = Math.round(amount * (tarif / 100));
+        const tarif   = getTarif(sel.value);
+        const dpp_ppn = Math.round((100 / 111) * (11 / 12) * amount);
+        const ppn     = Math.round(dpp_ppn * 0.12);
+        const dpp_pph = Math.round(amount - ppn);
+        const pph42   = Math.round(dpp_pph * (tarif / 100));
 
-        /* DPP */
-        setResult42('r42_dpp', 'card42-dpp', amount, false);
+        /* DPP PPN */
+        setResult42('r42_dpp_ppn', 'card42-dpp-ppn', dpp_ppn, false);
+
+        /* DPP PPh */
+        setTimeout(() => setResult42('r42_dpp', 'card42-dpp', dpp_pph, false), 90);
+
+        /* PPN */
+        setTimeout(() => setResult42('r42_ppn', 'card42-ppn', ppn, true), 180);
 
         /* Tarif % display */
-        const tarifEl = document.getElementById('r42_tarif_pct');
+        const tarifEl    = document.getElementById('r42_tarif_pct');
         const tarifBadge = document.getElementById('r42_tarif_badge');
         const card42tarif = document.getElementById('card42-tarif');
         tarifEl.classList.remove('zero', 'has-value', 'value-updated');
         void tarifEl.offsetWidth;
         tarifBadge.textContent = formatTarifLabel(tarif);
-        tarifEl.textContent = formatTarifLabel(tarif);
+        tarifEl.textContent    = formatTarifLabel(tarif);
         tarifEl.classList.add('has-value', 'value-updated');
         card42tarif.classList.add('active');
 
-        setTimeout(() => setResult42('r42_pph', 'card42-pph', pph42, true), 180);
+        setTimeout(() => setResult42('r42_pph', 'card42-pph', pph42, true), 270);
     }
 
     function setResult42(id, cardId, value, isPurple) {
@@ -869,13 +898,13 @@
         document.getElementById('amount42').value = '';
         document.getElementById('jenis42').value = '';
         document.getElementById('tarif-badge').classList.remove('visible');
-        ['r42_dpp', 'r42_tarif_pct', 'r42_pph'].forEach(id => {
+        ['r42_dpp_ppn', 'r42_dpp', 'r42_ppn', 'r42_tarif_pct', 'r42_pph'].forEach(id => {
             const el = document.getElementById(id);
             el.textContent = '\u2014';
             el.className = 'result-value zero';
         });
         document.getElementById('r42_tarif_badge').textContent = '—';
-        ['card42-dpp', 'card42-tarif', 'card42-pph'].forEach(id => {
+        ['card42-dpp-ppn', 'card42-dpp', 'card42-ppn', 'card42-tarif', 'card42-pph'].forEach(id => {
             document.getElementById(id).classList.remove('active');
         });
     }
