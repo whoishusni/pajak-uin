@@ -451,10 +451,110 @@
         .swal2-icon.swal2-info { color: var(--teal) !important; }
         .swal2-icon.swal2-error { color: var(--danger) !important; border-color: var(--danger) !important; }
 
+        /* ── Tab System ── */
+        .tab-bar {
+            display: flex;
+            gap: 4px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            padding: 5px;
+            margin-bottom: 32px;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            background: transparent;
+            color: var(--text-muted);
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--teal) 0%, #148578 100%);
+            color: white;
+            box-shadow: 0 4px 16px rgba(26,158,143,0.35);
+        }
+        .tab-btn:not(.active):hover {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-primary);
+        }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* ── PPh 4(2) Select ── */
+        .select-wrap { position: relative; }
+        .select-wrap select {
+            width: 100%;
+            padding: 14px 16px;
+            padding-right: 40px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            transition: all 0.25s ease;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+            cursor: pointer;
+        }
+        .select-wrap select:focus {
+            border-color: var(--teal);
+            background: rgba(26,158,143,0.06);
+            box-shadow: 0 0 0 3px rgba(26,158,143,0.12);
+        }
+        .select-wrap::after {
+            content: '▾';
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+            font-size: 14px;
+        }
+        .select-wrap select option {
+            background: var(--navy-card);
+            color: var(--text-primary);
+        }
+        .tarif-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+            padding: 6px 12px;
+            background: rgba(26,158,143,0.12);
+            border: 1px solid rgba(26,158,143,0.25);
+            border-radius: 8px;
+            font-size: 12px;
+            color: var(--teal-light);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+        .tarif-badge.visible { opacity: 1; }
+
+        .result-card.purple-accent::before { background: #8b5cf6; }
+        .result-card.purple-accent.active {
+            background: rgba(139,92,246,0.06);
+            border-color: rgba(139,92,246,0.2);
+        }
+        .icon-purple { background: rgba(139,92,246,0.15); }
+        .tag-purple { background: rgba(139,92,246,0.2); color: #c4b5fd; }
+
         @media (max-width: 600px) {
             .card { padding: 32px 24px; }
             h1 { font-size: 22px; }
             .btn-row { flex-direction: column; }
+            .tab-btn { font-size: 11px; padding: 9px 8px; }
         }
     </style>
 </head>
@@ -482,86 +582,180 @@
 
         <div class="divider"></div>
 
-        <!-- Form -->
-        <div class="form-group">
-            <label for="amount">Nominal Transaksi</label>
-            <div class="input-wrap">
-                <span class="input-prefix">Rp</span>
-                <input type="text" id="amount" placeholder="0" oninput="formatInput(this)">
+        <!-- Tab Bar -->
+        <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchTab('tab-umum', this)">&#128202; PPN &amp; PPh Umum</button>
+            <button class="tab-btn" onclick="switchTab('tab-pph42', this)">&#127975; PPh Pasal 4(2)</button>
+        </div>
+
+        <!-- ══ TAB 1: PPN & PPh Umum ══ -->
+        <div id="tab-umum" class="tab-panel active">
+            <div class="form-group">
+                <label for="amount">Nominal Transaksi</label>
+                <div class="input-wrap">
+                    <span class="input-prefix">Rp</span>
+                    <input type="text" id="amount" placeholder="0" oninput="formatInput(this)">
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button class="btn btn-primary" onclick="calculateTaxes()">
+                    &#9889; Hitung Pajak
+                </button>
+                <button class="btn btn-secondary" onclick="resetForm()">
+                    &#8634; Reset
+                </button>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="results-header">
+                <div class="results-header-line"></div>
+                <span class="results-label">Hasil Perhitungan</span>
+                <div class="results-header-line"></div>
+            </div>
+
+            <div class="results-grid">
+                <div class="result-card" id="card-dpp-ppn">
+                    <div class="result-left">
+                        <div class="result-icon icon-teal">&#129518;</div>
+                        <div>
+                            <div class="result-name">DPP PPN <span class="result-tag tag-teal">Dasar Pengenaan</span></div>
+                        </div>
+                    </div>
+                    <div class="result-value zero" id="dpp_ppn">&mdash;</div>
+                </div>
+
+                <div class="result-card" id="card-dpp-pph">
+                    <div class="result-left">
+                        <div class="result-icon icon-teal">&#129518;</div>
+                        <div>
+                            <div class="result-name">DPP PPh <span class="result-tag tag-teal">Dasar Pengenaan</span></div>
+                        </div>
+                    </div>
+                    <div class="result-value zero" id="dpp_pph">&mdash;</div>
+                </div>
+
+                <div class="result-card gold-accent" id="card-ppn">
+                    <div class="result-left">
+                        <div class="result-icon icon-gold">&#128202;</div>
+                        <div>
+                            <div class="result-name">PPN <span class="result-tag tag-gold">12%</span></div>
+                        </div>
+                    </div>
+                    <div class="result-value zero" id="ppn">&mdash;</div>
+                </div>
+
+                <div class="result-card" id="card-pph22">
+                    <div class="result-left">
+                        <div class="result-icon icon-blue">&#128188;</div>
+                        <div>
+                            <div class="result-name">PPh Pasal 22 <span class="result-tag tag-blue">1,5%</span></div>
+                        </div>
+                    </div>
+                    <div class="result-value zero" id="pph22">&mdash;</div>
+                </div>
+
+                <div class="result-card" id="card-pph23">
+                    <div class="result-left">
+                        <div class="result-icon icon-blue">&#128203;</div>
+                        <div>
+                            <div class="result-name">PPh Pasal 23 <span class="result-tag tag-blue">2%</span></div>
+                        </div>
+                    </div>
+                    <div class="result-value zero" id="pph23">&mdash;</div>
+                </div>
             </div>
         </div>
 
-        <div class="btn-row">
-            <button class="btn btn-primary" onclick="calculateTaxes()">
-                &#9889; Hitung Pajak
-            </button>
-            <button class="btn btn-secondary" onclick="resetForm()">
-                &#8634; Reset
-            </button>
+        <!-- ══ TAB 2: PPh Pasal 4(2) ══ -->
+        <div id="tab-pph42" class="tab-panel">
+            <div class="form-group">
+                <label for="jenis42">Jenis Penghasilan</label>
+                <div class="select-wrap">
+                    <select id="jenis42" onchange="onJenis42Change()">
+                        <option value="">-- Pilih Jenis Penghasilan --</option>
+                        <optgroup label="Jasa Konsultansi Konstruksi">
+                            <option value="3.5">Memiliki SBU atau SKK (3,5%)</option>
+                            <option value="6">Tidak memiliki SBU atau SKK (6%)</option>
+                        </optgroup>
+                        <optgroup label="Jasa Pekerjaan Konstruksi">
+                            <option value="1.75">Memiliki SBU Kualifikasi Kecil atau SKK (1,75%)</option>
+                            <option value="2.65a">Memiliki SBU Kualifikasi Menengah dan Besar (2,65%)</option>
+                            <option value="4a">Tidak memiliki SBU atau SKK (4%)</option>
+                        </optgroup>
+                        <optgroup label="Jasa Pekerjaan Konstruksi Terintegrasi">
+                            <option value="2.65b">Memiliki SBU (2,65%)</option>
+                            <option value="4b">Tidak Memiliki SBU (4%)</option>
+                        </optgroup>
+                        <optgroup label="Lainnya">
+                            <option value="10">Sewa Tanah / Bangunan (10%)</option>
+                            <option value="0">Pengalihan Tanah/Bangunan untuk Kep. Umum (0%)</option>
+                            <option value="25">Hadiah Undian (25%)</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="tarif-badge" id="tarif-badge">&#9889; Tarif: <span id="tarif-display">—</span></div>
+            </div>
+
+            <div class="form-group" style="margin-top:16px;">
+                <label for="amount42">DPP (Dasar Pengenaan Pajak)</label>
+                <div class="input-wrap">
+                    <span class="input-prefix">Rp</span>
+                    <input type="text" id="amount42" placeholder="0" oninput="formatInput(this)">
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button class="btn btn-primary" onclick="calculate42()">
+                    &#9889; Hitung PPh 4(2)
+                </button>
+                <button class="btn btn-secondary" onclick="reset42()">
+                    &#8634; Reset
+                </button>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="results-header">
+                <div class="results-header-line"></div>
+                <span class="results-label">Hasil Perhitungan PPh Pasal 4(2)</span>
+                <div class="results-header-line"></div>
+            </div>
+
+            <div class="results-grid">
+                <div class="result-card" id="card42-dpp">
+                    <div class="result-left">
+                        <div class="result-icon icon-teal">&#129518;</div>
+                        <div>
+                            <div class="result-name">DPP <span class="result-tag tag-teal">Dasar Pengenaan</span></div>
+                        </div>
+                    </div>
+                    <div class="result-value zero" id="r42_dpp">&mdash;</div>
+                </div>
+
+                <div class="result-card" id="card42-tarif">
+                    <div class="result-left">
+                        <div class="result-icon icon-gold">&#128204;</div>
+                        <div>
+                            <div class="result-name">Tarif <span class="result-tag tag-gold" id="r42_tarif_badge">—</span></div>
+                        </div>
+                    </div>
+                    <div class="result-value zero" id="r42_tarif_pct">&mdash;</div>
+                </div>
+
+                <div class="result-card purple-accent" id="card42-pph">
+                    <div class="result-left">
+                        <div class="result-icon icon-purple">&#127975;</div>
+                        <div>
+                            <div class="result-name">PPh Pasal 4(2) Final <span class="result-tag tag-purple">Final</span></div>
+                        </div>
+                    </div>
+                    <div class="result-value zero" id="r42_pph">&mdash;</div>
+                </div>
+            </div>
         </div>
 
-        <div class="divider"></div>
-
-        <!-- Results -->
-        <div class="results-header">
-            <div class="results-header-line"></div>
-            <span class="results-label">Hasil Perhitungan</span>
-            <div class="results-header-line"></div>
-        </div>
-
-        <div class="results-grid">
-
-            <div class="result-card" id="card-dpp-ppn">
-                <div class="result-left">
-                    <div class="result-icon icon-teal">&#129518;</div>
-                    <div>
-                        <div class="result-name">DPP PPN <span class="result-tag tag-teal">Dasar Pengenaan</span></div>
-                    </div>
-                </div>
-                <div class="result-value zero" id="dpp_ppn">&mdash;</div>
-            </div>
-
-            <div class="result-card" id="card-dpp-pph">
-                <div class="result-left">
-                    <div class="result-icon icon-teal">&#129518;</div>
-                    <div>
-                        <div class="result-name">DPP PPh <span class="result-tag tag-teal">Dasar Pengenaan</span></div>
-                    </div>
-                </div>
-                <div class="result-value zero" id="dpp_pph">&mdash;</div>
-            </div>
-
-            <div class="result-card gold-accent" id="card-ppn">
-                <div class="result-left">
-                    <div class="result-icon icon-gold">&#128202;</div>
-                    <div>
-                        <div class="result-name">PPN <span class="result-tag tag-gold">12%</span></div>
-                    </div>
-                </div>
-                <div class="result-value zero" id="ppn">&mdash;</div>
-            </div>
-
-            <div class="result-card" id="card-pph22">
-                <div class="result-left">
-                    <div class="result-icon icon-blue">&#128188;</div>
-                    <div>
-                        <div class="result-name">PPh Pasal 22 <span class="result-tag tag-blue">1,5%</span></div>
-                    </div>
-                </div>
-                <div class="result-value zero" id="pph22">&mdash;</div>
-            </div>
-
-            <div class="result-card" id="card-pph23">
-                <div class="result-left">
-                    <div class="result-icon icon-blue">&#128203;</div>
-                    <div>
-                        <div class="result-name">PPh Pasal 23 <span class="result-tag tag-blue">2%</span></div>
-                    </div>
-                </div>
-                <div class="result-value zero" id="pph23">&mdash;</div>
-            </div>
-
-        </div>
     </div>
 </main>
 
@@ -571,7 +765,114 @@
 </footer>
 
 <script>
-    const buildVersion = "05 Januari 2026";
+    const buildVersion = "06 April 2026";
+
+    /* ── Tab switching ── */
+    function switchTab(tabId, btn) {
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        btn.classList.add('active');
+    }
+
+    /* ── PPh 4(2) tarif map ── */
+    const tarifMap = {
+        '3.5':   3.5,
+        '6':     6,
+        '1.75':  1.75,
+        '2.65a': 2.65,
+        '4a':    4,
+        '2.65b': 2.65,
+        '4b':    4,
+        '10':    10,
+        '0':     0,
+        '25':    25,
+    };
+
+    function getTarif(val) { return tarifMap[val] ?? null; }
+
+    function formatTarifLabel(t) {
+        return t % 1 === 0 ? t + '%' : t.toString().replace('.', ',') + '%';
+    }
+
+    function onJenis42Change() {
+        const sel = document.getElementById('jenis42');
+        const badge = document.getElementById('tarif-badge');
+        const display = document.getElementById('tarif-display');
+        const t = getTarif(sel.value);
+        if (t !== null) {
+            display.textContent = formatTarifLabel(t);
+            badge.classList.add('visible');
+        } else {
+            badge.classList.remove('visible');
+        }
+    }
+
+    /* ── Calculate PPh 4(2) ── */
+    function calculate42() {
+        const sel = document.getElementById('jenis42');
+        const raw = document.getElementById('amount42').value.replace(/\D/g, '');
+        const amount = parseFloat(raw);
+
+        if (!sel.value) {
+            Swal.fire({ icon: 'warning', title: 'Pilih Jenis Penghasilan', text: 'Silakan pilih jenis penghasilan terlebih dahulu.', confirmButtonText: 'OK' });
+            return;
+        }
+        if (!raw || isNaN(amount) || amount <= 0) {
+            Swal.fire({ icon: 'error', title: 'Nominal Tidak Valid', text: 'Masukkan DPP berupa angka positif.', confirmButtonText: 'OK' });
+            return;
+        }
+
+        const tarif = getTarif(sel.value);
+        const pph42 = Math.round(amount * (tarif / 100));
+
+        /* DPP */
+        setResult42('r42_dpp', 'card42-dpp', amount, false);
+
+        /* Tarif % display */
+        const tarifEl = document.getElementById('r42_tarif_pct');
+        const tarifBadge = document.getElementById('r42_tarif_badge');
+        const card42tarif = document.getElementById('card42-tarif');
+        tarifEl.classList.remove('zero', 'has-value', 'value-updated');
+        void tarifEl.offsetWidth;
+        tarifBadge.textContent = formatTarifLabel(tarif);
+        tarifEl.textContent = formatTarifLabel(tarif);
+        tarifEl.classList.add('has-value', 'value-updated');
+        card42tarif.classList.add('active');
+
+        setTimeout(() => setResult42('r42_pph', 'card42-pph', pph42, true), 180);
+    }
+
+    function setResult42(id, cardId, value, isPurple) {
+        const el = document.getElementById(id);
+        const card = document.getElementById(cardId);
+        el.classList.remove('zero', 'has-value', 'value-updated');
+        void el.offsetWidth;
+        if (value === 0 || isNaN(value)) {
+            el.textContent = 'Rp\u00a00';
+            el.classList.add('has-value', 'value-updated');
+            card.classList.add('active');
+        } else {
+            el.textContent = formatCurrency(value);
+            el.classList.add('has-value', 'value-updated');
+            card.classList.add('active');
+        }
+    }
+
+    function reset42() {
+        document.getElementById('amount42').value = '';
+        document.getElementById('jenis42').value = '';
+        document.getElementById('tarif-badge').classList.remove('visible');
+        ['r42_dpp', 'r42_tarif_pct', 'r42_pph'].forEach(id => {
+            const el = document.getElementById(id);
+            el.textContent = '\u2014';
+            el.className = 'result-value zero';
+        });
+        document.getElementById('r42_tarif_badge').textContent = '—';
+        ['card42-dpp', 'card42-tarif', 'card42-pph'].forEach(id => {
+            document.getElementById(id).classList.remove('active');
+        });
+    }
 
     function formatCurrency(amount) {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(amount);
