@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="popup-config.js"></script>
   <style>
     :root {
       --paper: #f4efe7;
@@ -26,6 +27,46 @@
       --danger: #9e2f2f;
       --success: #2c5d4b;
       --bg: #f0eadf;
+      --page-bg: #f0eadf;
+      --page-glow: rgba(255,255,255,0.18);
+      --button-text: #f7f2ea;
+      --input-bg: rgba(255, 255, 255, 0.35);
+      --input-solid: rgba(255, 255, 255, 0.45);
+      --soft-tint: rgba(32,35,31,0.02);
+      --soft-tint-strong: rgba(32,35,31,0.06);
+      --soft-rule: rgba(32, 35, 31, 0.12);
+      --toggle-bg: rgba(255,255,255,0.72);
+      --toggle-border: rgba(31,53,45,0.2);
+      --toggle-shadow: rgba(24, 22, 18, 0.12);
+    }
+
+    body[data-theme="dark"] {
+      --paper: #1f1f1b;
+      --paper-strong: #272822;
+      --panel: #2d2e29;
+      --ink: #f8f8f2;
+      --muted: #a6a28e;
+      --line: rgba(255,255,255,0.12);
+      --olive: #a6e22e;
+      --olive-deep: #e6db74;
+      --gold: #fd971f;
+      --gold-soft: #f8f8f2;
+      --sage: #66d9ef;
+      --shadow: rgba(0, 0, 0, 0.42);
+      --danger: #f92672;
+      --success: #a6e22e;
+      --bg: #272822;
+      --page-bg: #1e1f1c;
+      --page-glow: rgba(255,255,255,0.02);
+      --button-text: #272822;
+      --input-bg: rgba(255,255,255,0.03);
+      --input-solid: rgba(39, 40, 34, 0.9);
+      --soft-tint: rgba(255,255,255,0.02);
+      --soft-tint-strong: rgba(255,255,255,0.04);
+      --soft-rule: rgba(255, 255, 255, 0.1);
+      --toggle-bg: rgba(31, 31, 27, 0.9);
+      --toggle-border: rgba(166, 226, 46, 0.45);
+      --toggle-shadow: rgba(0, 0, 0, 0.35);
     }
 
     * { box-sizing: border-box; }
@@ -34,7 +75,7 @@
       margin: 0;
       min-height: 100%;
       font-family: "Inter", sans-serif;
-      background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.02)), var(--bg);
+      background: linear-gradient(180deg, var(--page-glow), rgba(255,255,255,0.02)), var(--bg);
       color: var(--ink);
     }
 
@@ -53,6 +94,12 @@
       position: relative;
     }
 
+    body[data-theme="dark"] .page {
+      background: rgba(18, 24, 29, 0.78);
+      border-color: var(--line);
+      box-shadow: 0 28px 70px rgba(2, 6, 8, 0.42);
+    }
+
     .page::before {
       content: "";
       position: absolute;
@@ -61,10 +108,89 @@
       pointer-events: none;
     }
 
+    body[data-theme="dark"] .page::before {
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
     .masthead {
       padding: 28px 36px 18px;
       border-bottom: 1px solid var(--line);
       background: rgba(255,255,255,0.16);
+      position: relative;
+    }
+
+    .theme-toggle {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      z-index: 1;
+    }
+
+    .theme-toggle-caption {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .theme-switch {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 176px;
+      height: 36px;
+      padding: 4px;
+      border-radius: 999px;
+      border: 1px solid var(--toggle-border);
+      background: var(--toggle-bg);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.18);
+      cursor: pointer;
+      transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .theme-switch:hover {
+      transform: translateY(-1px);
+    }
+
+    .theme-switch::before {
+      content: "";
+      position: absolute;
+      width: calc(50% - 6px);
+      height: calc(100% - 10px);
+      border-radius: 999px;
+      background: linear-gradient(135deg, #f9d976, #f4a261);
+      left: 5px;
+      top: 5px;
+      transition: transform 180ms ease, background 180ms ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    }
+
+    body[data-theme="dark"] .theme-switch::before {
+      background: linear-gradient(135deg, #a6e22e, #66d9ef);
+      transform: translateX(100%);
+    }
+
+    .theme-mode {
+      position: relative;
+      z-index: 1;
+      width: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.68rem;
+      line-height: 1;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--muted);
+      transition: color 180ms ease;
+    }
+
+    .theme-mode.active {
+      color: var(--ink);
     }
 
     .eyebrow {
@@ -149,6 +275,10 @@
       color: #f7f3ee;
     }
 
+    body[data-theme="dark"] .tab-btn.active {
+      color: #0d151a;
+    }
+
     .tab-panel {
       display: none;
     }
@@ -200,7 +330,7 @@
     input[type="text"], select {
       width: 100%;
       border: 1px solid rgba(32, 35, 31, 0.14);
-      background: rgba(255, 255, 255, 0.35);
+      background: var(--input-bg);
       color: var(--ink);
       min-height: 48px;
       padding: 12px 14px 12px 46px;
@@ -208,6 +338,12 @@
       font-size: 1.05rem;
       outline: none;
       transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+    }
+
+    body[data-theme="dark"] input[type="text"],
+    body[data-theme="dark"] select {
+      background: var(--input-solid);
+      border-color: var(--line);
     }
 
     select {
@@ -248,12 +384,17 @@
     .btn-primary {
       background: var(--olive-deep);
       border-color: var(--olive-deep);
-      color: #f7f2ea;
+      color: var(--button-text);
       box-shadow: 0 10px 18px rgba(31,53,45,0.14);
     }
 
     .btn-secondary {
       background: transparent;
+    }
+
+    body[data-theme="dark"] .btn-secondary {
+      color: var(--ink);
+      background: rgba(255,255,255,0.02);
     }
 
     button:hover {
@@ -264,6 +405,10 @@
       border: 1px solid var(--line);
       background: linear-gradient(180deg, rgba(255,255,255,0.26), rgba(32,35,31,0.01));
       padding: 18px 18px 14px;
+    }
+
+    body[data-theme="dark"] .info-block {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
     }
 
     .info-header {
@@ -363,6 +508,12 @@
       transition: opacity 200ms ease;
     }
 
+    body[data-theme="dark"] .tarif-badge {
+      background: rgba(255,255,255,0.04);
+      border-color: var(--line);
+      color: var(--ink);
+    }
+
     .tarif-badge.visible { opacity: 1; }
 
     .result-card {
@@ -374,6 +525,10 @@
       justify-content: space-between;
       gap: 16px;
       min-height: 72px;
+    }
+
+    body[data-theme="dark"] .result-card {
+      background: rgba(21, 31, 36, 0.9);
     }
 
     .card-copy {
@@ -428,6 +583,27 @@
       color: var(--muted);
       margin: 26px 0 12px;
       font-weight: 700;
+    }
+
+    .welcome-popup {
+      border: 1px solid rgba(32, 35, 31, 0.12);
+      border-radius: 18px;
+      box-shadow: 0 22px 48px rgba(24, 22, 18, 0.16);
+      overflow: hidden;
+    }
+
+    .welcome-title {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(2rem, 3vw, 2.8rem);
+      letter-spacing: -0.04em;
+      color: var(--olive-deep);
+    }
+
+    .welcome-confirm {
+      border-radius: 10px !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.04em !important;
+      text-transform: uppercase !important;
     }
 
     footer {
@@ -496,6 +672,13 @@
       <div class="title-wrap">
         <h1>Kalkulator <span>Pajak</span></h1>
         <div class="institution">Aplikasi Kalkulator Pajak<br />UIN Datokarama Palu</div>
+      </div>
+      <div class="theme-toggle" aria-label="Pilih mode tampilan">
+        <span class="theme-toggle-caption" id="theme-toggle-caption">Mode</span>
+        <button id="theme-toggle-btn" class="theme-switch" type="button" aria-labelledby="theme-toggle-caption" aria-label="Ganti mode tampilan" title="Ganti mode tampilan">
+          <span class="theme-mode active">Terang</span>
+          <span class="theme-mode">Gelap</span>
+        </button>
       </div>
     </header>
 
@@ -636,6 +819,64 @@
 
   <script>
     const buildVersion = "v1.4.2 — 07 September 2026";
+
+    function showWelcomePopup() {
+      const config = window.popupConfig || {};
+      const enabled = config.enabled !== false;
+
+      if (!enabled) return;
+
+      const typeMap = {
+        info: 'info',
+        warning: 'warning',
+        danger: 'error'
+      };
+
+      const type = typeMap[config.type] || 'info';
+      const title = config.title || 'Selamat Datang';
+      const message = config.message || 'Aplikasi siap digunakan.';
+
+      Swal.fire({
+        icon: type,
+        title: title,
+        html: message.replace(/\n/g, '<br>'),
+        confirmButtonText: 'Lanjut',
+        confirmButtonColor: '#1f352d',
+        background: '#fffdf9',
+        color: '#1d201d',
+        customClass: {
+          popup: 'welcome-popup',
+          title: 'welcome-title',
+          confirmButton: 'welcome-confirm'
+        }
+      });
+    }
+
+    function applyTheme(theme) {
+      document.body.setAttribute('data-theme', theme);
+      const btn = document.getElementById('theme-toggle-btn');
+      const labels = btn ? btn.querySelectorAll('.theme-mode') : [];
+
+      labels.forEach((label) => {
+        const isActive = (label.textContent.trim() === 'Terang' && theme === 'light') ||
+          (label.textContent.trim() === 'Gelap' && theme === 'dark');
+        label.classList.toggle('active', isActive);
+      });
+
+      if (btn) {
+        btn.setAttribute('aria-label', theme === 'dark' ? 'Aktifkan mode terang' : 'Aktifkan mode gelap');
+        btn.setAttribute('title', theme === 'dark' ? 'Aktifkan mode terang' : 'Aktifkan mode gelap');
+      }
+      localStorage.setItem('pajak-ui-theme', theme);
+    }
+
+    const savedTheme = localStorage.getItem('pajak-ui-theme') || 'light';
+    applyTheme(savedTheme);
+
+    document.getElementById('theme-toggle-btn')?.addEventListener('click', () => {
+      const nextTheme = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      applyTheme(nextTheme);
+    });
 
     function switchTab(tabId, btn) {
       document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
@@ -875,6 +1116,7 @@
       if (e.key === 'Enter') calculate42();
     });
 
+    showWelcomePopup();
     document.getElementById('build-version').textContent = buildVersion;
   </script>
 </body>
