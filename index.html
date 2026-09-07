@@ -348,6 +348,9 @@
 
     select {
       padding-left: 14px;
+      padding-right: 42px;
+      font-size: 0.9rem;
+      line-height: 1.5;
       appearance: none;
       background-image:
         linear-gradient(45deg, transparent 50%, var(--muted) 50%),
@@ -357,6 +360,31 @@
         calc(100% - 13px) calc(50% - 2px);
       background-size: 5px 5px, 5px 5px;
       background-repeat: no-repeat;
+    }
+
+    select option,
+    select optgroup {
+      font-family: "Inter", sans-serif;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: var(--ink);
+    }
+
+    select optgroup {
+      font-weight: 700;
+      color: var(--olive-deep);
+      background: rgba(45, 74, 61, 0.06);
+    }
+
+    select option {
+      color: var(--ink);
+      background: var(--panel);
+    }
+
+    select option:checked,
+    select option:hover {
+      background: rgba(45, 74, 61, 0.12);
+      color: var(--olive-deep);
     }
 
     input[type="text"]:focus, select:focus {
@@ -743,23 +771,23 @@
               <label for="jenis42">Jenis Penghasilan</label>
               <select id="jenis42" onchange="onJenis42Change()">
                 <option value="">-- Pilih Jenis Penghasilan --</option>
-                <optgroup label="Jasa Konsultansi Konstruksi (Pengawasan dan Perencanaan)">
-                  <option value="3.5">Memiliki SBU atau SKK (3,5%)</option>
-                  <option value="6">Tidak memiliki SBU atau SKK (6%)</option>
+                <optgroup label="Konsultansi Konstruksi">
+                  <option value="3.5">Memiliki SBU/SKK — 3,5%</option>
+                  <option value="6">Tidak punya SBU/SKK — 6%</option>
                 </optgroup>
-                <optgroup label="Jasa Pekerjaan Konstruksi">
-                  <option value="1.75">Memiliki SBU Kualifikasi Kecil atau SKK (1,75%)</option>
-                  <option value="2.65a">Memiliki SBU Kualifikasi Menengah dan Besar (2,65%)</option>
-                  <option value="4a">Tidak memiliki SBU atau SKK (4%)</option>
+                <optgroup label="Pekerjaan Konstruksi">
+                  <option value="1.75">SBU Kecil/SKK — 1,75%</option>
+                  <option value="2.65a">SBU Menengah/Besar — 2,65%</option>
+                  <option value="4a">Tidak punya SBU/SKK — 4%</option>
                 </optgroup>
-                <optgroup label="Jasa Pekerjaan Konstruksi Terintegrasi">
-                  <option value="2.65b">Memiliki SBU (2,65%)</option>
-                  <option value="4b">Tidak Memiliki SBU (4%)</option>
+                <optgroup label="Terintegrasi">
+                  <option value="2.65b">Memiliki SBU — 2,65%</option>
+                  <option value="4b">Tidak punya SBU — 4%</option>
                 </optgroup>
                 <optgroup label="Lainnya">
-                  <option value="10">Sewa Tanah / Bangunan (10%)</option>
-                  <option value="0">Pengalihan Tanah/Bangunan untuk Kep. Umum (0%)</option>
-                  <option value="25">Hadiah Undian (25%)</option>
+                  <option value="10">Sewa tanah/bangunan — 10%</option>
+                  <option value="0">Pengalihan tanah/bangunan — 0%</option>
+                  <option value="25">Hadiah undian — 25%</option>
                 </optgroup>
               </select>
               <div class="tarif-badge" id="tarif-badge">Tarif: <span id="tarif-display">—</span></div>
@@ -818,7 +846,7 @@
   </div>
 
   <script>
-    const buildVersion = "v1.4.2 — 07 September 2026";
+    const buildVersion = "v1.4.5 — 07 September 2026";
 
     function showWelcomePopup() {
       const config = window.popupConfig || {};
